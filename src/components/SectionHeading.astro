@@ -2,36 +2,44 @@
 type Props = {
   title: string
   subtitle?: string
+  kicker?: string
   align?: 'left' | 'center'
+  tone?: 'dark' | 'light'
 }
 
-const { title, subtitle, align = 'center' } = Astro.props
+const { title, subtitle, kicker, align = 'center', tone = 'dark' } = Astro.props
+
+const titleColor = tone === 'light' ? 'text-white' : 'text-brand-navy'
+const subColor = tone === 'light' ? 'text-white/70' : 'text-text-muted'
 ---
 
 <div
-  class:list={[
-    'mb-10',
-    align === 'center' ? 'text-center' : 'text-left',
-  ]}
+  class:list={['mb-12 max-w-3xl', align === 'center' ? 'mx-auto text-center' : 'text-left']}
+  data-reveal="up"
 >
-  <h2 class="text-2xl font-bold tracking-tight text-brand-navy sm:text-3xl lg:text-4xl">{title}</h2>
+  {
+    kicker && (
+      <p
+        class:list={[
+          'kicker mb-4 flex items-center gap-3 text-brand-copper',
+          align === 'center' && 'justify-center',
+        ]}
+      >
+        <span class="inline-block h-px w-8 bg-brand-copper" aria-hidden="true" />
+        {kicker}
+      </p>
+    )
+  }
+  <h2 class:list={['display-xl text-3xl sm:text-4xl lg:text-5xl', titleColor]}>
+    {title}
+  </h2>
   {
     subtitle && (
       <p
-        class:list={[
-          'mt-3 max-w-2xl text-base leading-relaxed text-text-muted sm:text-lg',
-          align === 'center' && 'mx-auto',
-        ]}
+        class:list={['mt-5 text-base leading-relaxed sm:text-lg', subColor, align === 'center' && 'mx-auto']}
       >
         {subtitle}
       </p>
     )
   }
-  <div
-    class:list={[
-      'mt-4 h-1 w-16 rounded-full bg-brand-yellow',
-      align === 'center' && 'mx-auto',
-    ]}
-    aria-hidden="true"
-  />
 </div>

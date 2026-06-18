@@ -13,19 +13,20 @@ const pymes = await getPymes()
 <BaseLayout title="Contacto" description="Contáctanos a través de nuestras plataformas. Estamos para apoyar a las PYMES de Tierra Amarilla.">
   <Header slot="header" />
 
-  <Hero compact>
+  <Hero compact kicker="Hablemos">
     Contáctanos
   </Hero>
 
-  <section class="section-container py-16 lg:py-24">
-    <p class="mx-auto mb-12 max-w-2xl text-center text-base text-text-muted sm:text-lg">
-      A través de nuestras distintas plataformas. Escríbenos y potencia tu negocio junto a la agrupación.
-    </p>
+  <section class="bg-brand-cream py-20 lg:py-28">
+    <div class="section-container">
+      <p class="mx-auto mb-14 max-w-2xl text-center text-base text-text-muted sm:text-lg" data-reveal="up">
+        A través de nuestras distintas plataformas. Escríbenos y potencia tu negocio junto a la agrupación.
+      </p>
 
-    <div class="grid gap-12 lg:grid-cols-2">
-      <div class="space-y-8">
-        <div class="rounded-2xl bg-surface p-6 sm:p-8">
-          <h2 class="mb-6 text-lg font-bold text-brand-navy">Información de contacto</h2>
+      <div class="grid gap-12 lg:grid-cols-2">
+        <div class="space-y-8" data-reveal="left">
+          <div class="rounded-3xl border border-black/5 bg-white p-6 sm:p-8">
+            <h2 class="mb-6 font-display text-xl font-bold text-brand-navy">Información de contacto</h2>
           <ul class="space-y-5">
             <li>
               <a
@@ -82,17 +83,20 @@ const pymes = await getPymes()
           </ul>
         </div>
 
-        <div class="overflow-hidden rounded-2xl shadow-lg ring-1 ring-gray-200">
-          <iframe
-            title="Ubicación de Tierra Amarilla, Atacama"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=-70.28%2C-27.52%2C-70.22%2C-27.46&layer=mapnik&marker=-27.49%2C-70.25"
-            class="h-64 w-full border-0"
-            loading="lazy"
-          />
+          <div class="overflow-hidden rounded-3xl border border-black/5 shadow-lg">
+            <iframe
+              title="Ubicación de Tierra Amarilla, Atacama"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=-70.28%2C-27.52%2C-70.22%2C-27.46&layer=mapnik&marker=-27.49%2C-70.25"
+              class="h-64 w-full border-0"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+
+        <div data-reveal="right">
+          <ContactForm />
         </div>
       </div>
-
-      <ContactForm />
     </div>
   </section>
 

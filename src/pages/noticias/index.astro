@@ -4,7 +4,7 @@ import Header from '@/components/Header.astro'
 import Footer from '@/components/Footer.astro'
 import Hero from '@/components/Hero.astro'
 import SectionHeading from '@/components/SectionHeading.astro'
-import NewsGrid from '@/components/NewsGrid.astro'
+import NewsCard from '@/components/NewsCard.astro'
 import { getNoticias, getPymes } from '@/lib/wordpress'
 
 const noticias = await getNoticias()
@@ -17,16 +17,21 @@ const pymes = await getPymes()
 >
   <Header slot="header" />
 
-  <Hero compact>
+  <Hero compact kicker="Actualidad">
     Noticias y Actualizaciones
   </Hero>
 
-  <section class="section-container py-16 lg:py-24">
-    <SectionHeading
-      title="Lo último de nuestra agrupación"
-      subtitle="Historias, eventos y avances que impactan a nuestras empresas y la comunidad local."
-    />
-    <NewsGrid noticias={noticias} columns={3} />
+  <section class="bg-brand-cream py-20 lg:py-28">
+    <div class="section-container">
+      <SectionHeading
+        kicker="Blog"
+        title="Lo último de nuestra agrupación"
+        subtitle="Historias, eventos y avances que impactan a nuestras empresas y la comunidad local."
+      />
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
+        {noticias.map((noticia, i) => <NewsCard noticia={noticia} featured={i === 0} />)}
+      </div>
+    </div>
   </section>
 
   <Footer slot="footer" pymes={pymes} />

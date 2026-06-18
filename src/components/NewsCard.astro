@@ -3,9 +3,10 @@ import type { Noticia } from '@/lib/types'
 
 type Props = {
   noticia: Noticia
+  featured?: boolean
 }
 
-const { noticia } = Astro.props
+const { noticia, featured = false } = Astro.props
 
 const formattedDate = new Date(noticia.date).toLocaleDateString('es-CL', {
   day: 'numeric',
@@ -14,43 +15,72 @@ const formattedDate = new Date(noticia.date).toLocaleDateString('es-CL', {
 })
 ---
 
-<article class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-gray-100 transition-all hover:-translate-y-1 hover:shadow-xl hover:ring-brand-yellow/40">
-  <a href={`/noticias/${noticia.slug}`} class="block overflow-hidden" tabindex="0" aria-label={noticia.title}>
+<article
+  class:list={[
+    'group relative flex h-full flex-col overflow-hidden rounded-3xl border border-black/5 bg-white transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl',
+    featured && 'sm:col-span-2 sm:flex-row',
+  ]}
+>
+  <a
+    href={`/noticias/${noticia.slug}`}
+    class:list={['relative block overflow-hidden', featured ? 'sm:w-1/2' : '']}
+    tabindex="0"
+    aria-label={noticia.title}
+  >
     <img
       src={noticia.image}
       alt={noticia.title}
-      class="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      class:list={[
+        'w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110',
+        featured ? 'aspect-[4/3] h-full sm:aspect-auto' : 'aspect-[16/10]',
+      ]}
       loading="lazy"
       width="400"
       height="250"
     />
+    <span
+      class="absolute inset-0 bg-gradient-to-t from-brand-ink/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+      aria-hidden="true"></span>
   </a>
-  <div class="flex flex-1 flex-col p-5">
-    <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-text-muted">
-      {noticia.source && <span class="font-semibold text-brand-navy-light">{noticia.source}</span>}
-      <span aria-hidden="true">·</span>
+  <div class:list={['flex flex-1 flex-col p-6', featured && 'sm:justify-center sm:p-10']}>
+    <div class="mb-3 flex flex-wrap items-center gap-2 font-mono text-[0.7rem] uppercase tracking-wider text-text-muted">
+      {noticia.source && <span class="font-semibold text-brand-copper">{noticia.source}</span>}
+      <span aria-hidden="true">/</span>
       <time datetime={noticia.date}>{formattedDate}</time>
-      {noticia.readTime && (
-        <>
-          <span aria-hidden="true">·</span>
-          <span>{noticia.readTime}</span>
-        </>
-      )}
+      {
+        noticia.readTime && (
+          <>
+            <span aria-hidden="true">/</span>
+            <span>{noticia.readTime}</span>
+          </>
+        )
+      }
     </div>
-    <h3 class="mb-3 flex-1 text-base font-bold leading-snug text-text-primary group-hover:text-brand-navy">
-      <a href={`/noticias/${noticia.slug}`} class="hover:underline">
-        {noticia.title}
-      </a>
+    <h3
+      class:list={[
+        'mb-3 font-display font-bold leading-snug text-brand-navy transition-colors group-hover:text-brand-copper',
+        featured ? 'text-2xl lg:text-3xl' : 'flex-1 text-lg',
+      ]}
+    >
+      <a href={`/noticias/${noticia.slug}`}>{noticia.title}</a>
     </h3>
-    <p class="line-clamp-3 text-sm leading-relaxed text-text-muted">{noticia.excerpt}</p>
+    <p class:list={['text-sm leading-relaxed text-text-muted', featured ? 'line-clamp-4' : 'line-clamp-3']}>
+      {noticia.excerpt}
+    </p>
     <a
       href={`/noticias/${noticia.slug}`}
-      class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-navy-light hover:text-brand-yellow"
+      class="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-brand-navy"
       aria-label={`Leer más: ${noticia.title}`}
     >
       Leer más
-      <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      <svg
+        class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
       </svg>
     </a>
   </div>

@@ -13,11 +13,17 @@ const { pymes, rubros, showFilter = true } = Astro.props
 
 {
   showFilter && rubros.length > 0 && (
-    <div class="mb-8 flex flex-wrap items-center justify-center gap-2" id="pyme-filters" role="group" aria-label="Filtrar por rubro">
+    <div
+      class="mb-12 flex flex-wrap items-center justify-center gap-2"
+      id="pyme-filters"
+      role="group"
+      aria-label="Filtrar por rubro"
+      data-reveal="up"
+    >
       <button
         type="button"
         data-rubro="todos"
-        class="pyme-filter-btn rounded-full bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors"
+        class="pyme-filter-btn is-on rounded-full border border-brand-navy bg-brand-navy px-5 py-2 font-mono text-xs uppercase tracking-wider text-white transition-all"
         aria-pressed="true"
       >
         Todos
@@ -26,7 +32,7 @@ const { pymes, rubros, showFilter = true } = Astro.props
         <button
           type="button"
           data-rubro={rubro}
-          class="pyme-filter-btn rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-navy ring-1 ring-gray-200 transition-colors hover:ring-brand-yellow"
+          class="pyme-filter-btn rounded-full border border-black/10 bg-white px-5 py-2 font-mono text-xs uppercase tracking-wider text-brand-navy transition-all hover:border-brand-copper hover:text-brand-copper"
           aria-pressed="false"
         >
           {rubro}
@@ -36,13 +42,16 @@ const { pymes, rubros, showFilter = true } = Astro.props
   )
 }
 
-<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="pyme-grid">
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="pyme-grid" data-stagger>
   {pymes.map((pyme) => <PymeCard pyme={pyme} />)}
 </div>
 
 <script>
   const filterBtns = document.querySelectorAll<HTMLButtonElement>('.pyme-filter-btn')
   const cards = document.querySelectorAll<HTMLElement>('#pyme-grid article')
+
+  const onClasses = ['is-on', 'bg-brand-navy', 'text-white', 'border-brand-navy']
+  const offClasses = ['bg-white', 'text-brand-navy', 'border-black/10']
 
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -51,12 +60,8 @@ const { pymes, rubros, showFilter = true } = Astro.props
       filterBtns.forEach((b) => {
         const isActive = b === btn
         b.setAttribute('aria-pressed', String(isActive))
-        b.classList.toggle('bg-brand-navy', isActive)
-        b.classList.toggle('text-white', isActive)
-        b.classList.toggle('bg-white', !isActive)
-        b.classList.toggle('text-brand-navy', !isActive)
-        b.classList.toggle('ring-1', !isActive)
-        b.classList.toggle('ring-gray-200', !isActive)
+        onClasses.forEach((c) => b.classList.toggle(c, isActive))
+        offClasses.forEach((c) => b.classList.toggle(c, !isActive))
       })
 
       cards.forEach((card) => {

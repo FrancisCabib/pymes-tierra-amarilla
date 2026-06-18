@@ -17,28 +17,19 @@ const rubros = await getPymeRubros()
 >
   <Header slot="header" />
 
-  <Hero compact>
+  <Hero compact kicker="Directorio">
     Conoce nuestras PYMES y Servicios
   </Hero>
 
-  <section class="section-container py-16 lg:py-24">
-    <SectionHeading
-      title="Directorio de empresas"
-      subtitle="Explora las PYMES que integran nuestra agrupación y descubre los servicios que ofrecen a la comunidad y la industria."
-      align="left"
-    />
-    <PymeGrid pymes={pymes} rubros={rubros} />
-  </section>
-
-  <section class="bg-brand-navy py-12">
-    <div class="section-container text-center">
-      <p class="text-lg text-white/90">
-        ¿Quieres trabajar con nosotros?{' '}
-        <a href="/contacto" class="font-bold text-brand-yellow underline hover:no-underline">
-          Contáctanos
-        </a>
-        , potencia tu negocio y a Tierra Amarilla.
-      </p>
+  <section class="bg-brand-cream py-20 lg:py-28">
+    <div class="section-container">
+      <SectionHeading
+        kicker="Directorio de empresas"
+        title="Talento que mueve el desierto"
+        subtitle="Explora las PYMES que integran nuestra agrupación y descubre los servicios que ofrecen a la comunidad y la industria minera."
+        align="left"
+      />
+      <PymeGrid pymes={pymes} rubros={rubros} />
     </div>
   </section>
 

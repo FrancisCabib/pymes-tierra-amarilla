@@ -19,29 +19,34 @@ const pymes = await getPymes()
 >
   <Header slot="header" />
 
-  <Hero compact>
+  <Hero compact kicker="Nuestra agrupación">
     ¿Quiénes Somos?
   </Hero>
 
-  <section class="section-container py-16">
-    <ImageGallery images={institucional.gallery} altPrefix="Actividades de la agrupación" />
+  <section class="bg-brand-cream py-20 lg:py-28">
+    <div class="section-container">
+      <div data-reveal="up">
+        <ImageGallery images={institucional.gallery} altPrefix="Actividades de la agrupación" />
+      </div>
 
-    <div class="mt-12 grid gap-6 md:grid-cols-3">
-      {
-        institucional.blocks.map((block) => (
-          <InfoCard title={block.title} content={block.content} icon={block.icon} />
-        ))
-      }
+      <div class="mt-16 grid gap-6 md:grid-cols-3" data-stagger>
+        {
+          institucional.blocks.map((block, i) => (
+            <InfoCard title={block.title} content={block.content} icon={block.icon} index={i} />
+          ))
+        }
+      </div>
     </div>
   </section>
 
-  <section class="bg-surface py-16 lg:py-24">
+  <section class="bg-white py-20 lg:py-28">
     <div class="section-container">
       <SectionHeading
+        kicker="Comunidad"
         title="Empresas que nos acompañan"
         subtitle="Conoce a las PYMES que forman parte de nuestra agrupación."
       />
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-stagger>
         {pymes.map((pyme) => <PymeCard pyme={pyme} />)}
       </div>
     </div>

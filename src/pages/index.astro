@@ -3,8 +3,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import Header from '@/components/Header.astro'
 import Footer from '@/components/Footer.astro'
 import Hero from '@/components/Hero.astro'
+import Stats from '@/components/Stats.astro'
 import SectionHeading from '@/components/SectionHeading.astro'
-import NewsGrid from '@/components/NewsGrid.astro'
+import NewsCard from '@/components/NewsCard.astro'
 import YouTubeEmbed from '@/components/YouTubeEmbed.astro'
 import PartnerLogos from '@/components/PartnerLogos.astro'
 import { getNoticias, getPymes } from '@/lib/wordpress'
@@ -19,39 +20,77 @@ const pymes = await getPymes()
 
   <Hero />
 
-  <section class="section-container py-16 lg:py-24">
-    <div class="grid items-center gap-12 lg:grid-cols-2">
-      <div>
-        <SectionHeading title={institucional.intro.title} align="left" />
-        <p class="text-base leading-relaxed text-text-muted sm:text-lg">{institucional.intro.text}</p>
+  <span id="contenido"></span>
+
+  <Stats />
+
+  {/* Intro — asymmetric editorial split */}
+  <section class="relative overflow-hidden bg-brand-cream py-24 lg:py-32">
+    <div class="section-container grid gap-14 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-6" data-reveal="left">
+        <p class="kicker mb-5 flex items-center gap-3 text-brand-copper">
+          <span class="inline-block h-px w-8 bg-brand-copper" aria-hidden="true"></span>
+          Quiénes somos
+        </p>
+        <h2 class="display-xl text-4xl text-brand-navy sm:text-5xl lg:text-[3.5rem]">
+          {institucional.intro.title}
+        </h2>
+        <p class="mt-7 max-w-xl text-base leading-relaxed text-text-muted sm:text-lg">
+          {institucional.intro.text}
+        </p>
         <a
           href="/quienes-somos"
-          class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-navy-light hover:text-brand-yellow"
+          class="group mt-8 inline-flex items-center gap-2 font-bold text-brand-navy"
         >
           Conoce nuestra historia
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <svg
+            class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
           </svg>
         </a>
       </div>
-      <YouTubeEmbed videoId={siteConfig.youtubeId} title="Pymes Tierra Amarilla" />
+
+      <div class="lg:col-span-6" data-reveal="right">
+        <div class="relative">
+          <span
+            class="absolute -left-5 -top-5 font-display text-7xl font-extrabold text-brand-copper/15 lg:text-8xl"
+            aria-hidden="true">“</span
+          >
+          <YouTubeEmbed videoId={siteConfig.youtubeId} title="Pymes Tierra Amarilla" />
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="bg-surface py-16 lg:py-24">
+  {/* News — featured + grid */}
+  <section class="bg-white py-24 lg:py-32">
     <div class="section-container">
-      <SectionHeading
-        title="Últimas noticias"
-        subtitle="Mantente al tanto de los eventos y avances de nuestra agrupación."
-      />
-      <NewsGrid noticias={noticias} columns={4} />
-      <div class="mt-10 text-center">
+      <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
+        <SectionHeading
+          kicker="Actualidad"
+          title="Últimas noticias"
+          subtitle="Eventos, talleres y avances que impulsan a nuestras PYMES."
+          align="left"
+        />
         <a
           href="/noticias"
-          class="inline-flex items-center justify-center rounded-full border-2 border-brand-navy px-8 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+          class="btn-ghost hidden text-brand-navy hover:border-brand-copper hover:text-brand-copper sm:inline-flex"
         >
-          Ver todas las noticias
+          Ver todas
         </a>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
+        {noticias.map((noticia, i) => <NewsCard noticia={noticia} featured={i === 0} />)}
+      </div>
+
+      <div class="mt-10 text-center sm:hidden">
+        <a href="/noticias" class="btn-ghost text-brand-navy">Ver todas las noticias</a>
       </div>
     </div>
   </section>
