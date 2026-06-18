@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.pymestierramarilla.cl/sitemap-index.xml

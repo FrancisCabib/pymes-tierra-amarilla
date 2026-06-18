@@ -1,0 +1,34 @@
+---
+type Props = {
+  videoId: string
+  title?: string
+}
+
+const { videoId, title = 'Video de Pymes Tierra Amarilla' } = Astro.props
+
+const isValidVideo = videoId && !videoId.includes('YOUR_YOUTUBE')
+---
+
+{
+  isValidVideo ? (
+    <div class="overflow-hidden rounded-2xl shadow-xl ring-1 ring-gray-200">
+      <div class="relative aspect-video w-full bg-brand-navy">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+          title={title}
+          class="absolute inset-0 h-full w-full"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+    </div>
+  ) : (
+    <div class="flex aspect-video items-center justify-center rounded-2xl bg-brand-navy/5 ring-1 ring-gray-200">
+      <p class="px-6 text-center text-sm text-text-muted">
+        Video institucional próximamente. Configura <code class="text-brand-navy">youtubeId</code> en{' '}
+        <code class="text-brand-navy">src/lib/site.ts</code>
+      </p>
+    </div>
+  )
+}

@@ -1,0 +1,57 @@
+---
+import type { Noticia } from '@/lib/types'
+
+type Props = {
+  noticia: Noticia
+}
+
+const { noticia } = Astro.props
+
+const formattedDate = new Date(noticia.date).toLocaleDateString('es-CL', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+})
+---
+
+<article class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-gray-100 transition-all hover:-translate-y-1 hover:shadow-xl hover:ring-brand-yellow/40">
+  <a href={`/noticias/${noticia.slug}`} class="block overflow-hidden" tabindex="0" aria-label={noticia.title}>
+    <img
+      src={noticia.image}
+      alt={noticia.title}
+      class="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
+      width="400"
+      height="250"
+    />
+  </a>
+  <div class="flex flex-1 flex-col p-5">
+    <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-text-muted">
+      {noticia.source && <span class="font-semibold text-brand-navy-light">{noticia.source}</span>}
+      <span aria-hidden="true">·</span>
+      <time datetime={noticia.date}>{formattedDate}</time>
+      {noticia.readTime && (
+        <>
+          <span aria-hidden="true">·</span>
+          <span>{noticia.readTime}</span>
+        </>
+      )}
+    </div>
+    <h3 class="mb-3 flex-1 text-base font-bold leading-snug text-text-primary group-hover:text-brand-navy">
+      <a href={`/noticias/${noticia.slug}`} class="hover:underline">
+        {noticia.title}
+      </a>
+    </h3>
+    <p class="line-clamp-3 text-sm leading-relaxed text-text-muted">{noticia.excerpt}</p>
+    <a
+      href={`/noticias/${noticia.slug}`}
+      class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-navy-light hover:text-brand-yellow"
+      aria-label={`Leer más: ${noticia.title}`}
+    >
+      Leer más
+      <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
+  </div>
+</article>

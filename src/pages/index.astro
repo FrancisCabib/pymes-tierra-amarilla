@@ -1,0 +1,62 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Header from '@/components/Header.astro'
+import Footer from '@/components/Footer.astro'
+import Hero from '@/components/Hero.astro'
+import SectionHeading from '@/components/SectionHeading.astro'
+import NewsGrid from '@/components/NewsGrid.astro'
+import YouTubeEmbed from '@/components/YouTubeEmbed.astro'
+import PartnerLogos from '@/components/PartnerLogos.astro'
+import { getNoticias, getPymes } from '@/lib/wordpress'
+import { institucional, siteConfig } from '@/lib/site'
+
+const noticias = await getNoticias(4)
+const pymes = await getPymes()
+---
+
+<BaseLayout>
+  <Header slot="header" />
+
+  <Hero />
+
+  <section class="section-container py-16 lg:py-24">
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+      <div>
+        <SectionHeading title={institucional.intro.title} align="left" />
+        <p class="text-base leading-relaxed text-text-muted sm:text-lg">{institucional.intro.text}</p>
+        <a
+          href="/quienes-somos"
+          class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-navy-light hover:text-brand-yellow"
+        >
+          Conoce nuestra historia
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+      <YouTubeEmbed videoId={siteConfig.youtubeId} title="Pymes Tierra Amarilla" />
+    </div>
+  </section>
+
+  <section class="bg-surface py-16 lg:py-24">
+    <div class="section-container">
+      <SectionHeading
+        title="Últimas noticias"
+        subtitle="Mantente al tanto de los eventos y avances de nuestra agrupación."
+      />
+      <NewsGrid noticias={noticias} columns={4} />
+      <div class="mt-10 text-center">
+        <a
+          href="/noticias"
+          class="inline-flex items-center justify-center rounded-full border-2 border-brand-navy px-8 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white"
+        >
+          Ver todas las noticias
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <PartnerLogos pymes={pymes} />
+
+  <Footer slot="footer" pymes={pymes} />
+</BaseLayout>

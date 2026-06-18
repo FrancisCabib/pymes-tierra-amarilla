@@ -1,0 +1,101 @@
+---
+import '../styles/global.css'
+
+type Props = {
+  title?: string
+  description?: string
+  image?: string
+  canonicalPath?: string
+  jsonLd?: Record<string, unknown>
+}
+
+const {
+  title,
+  description,
+  image = '/images/og-default.svg',
+  canonicalPath = Astro.url.pathname,
+  jsonLd,
+} = Astro.props
+
+import { siteConfig } from '@/lib/site'
+
+const pageTitle = title ? `${title} | ${siteConfig.name}` : `${siteConfig.name} — ${siteConfig.tagline}`
+const pageDescription = description ?? siteConfig.description
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://www.pymestierramarilla.cl').href
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  url: canonicalUrl,
+  logo: new URL('/images/logo.svg', Astro.site ?? 'https://www.pymestierramarilla.cl').href,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Tierra Amarilla',
+    addressRegion: 'Atacama',
+    addressCountry: 'CL',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: siteConfig.whatsapp,
+    contactType: 'customer service',
+    email: siteConfig.email,
+  },
+  sameAs: [siteConfig.facebookLink],
+}
+
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Tierra Amarilla',
+    addressRegion: 'Región de Atacama',
+    addressCountry: 'CL',
+  },
+  telephone: siteConfig.whatsapp,
+  email: siteConfig.email,
+  url: new URL('/', Astro.site ?? 'https://www.pymestierramarilla.cl').href,
+}
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={new URL(image, Astro.site ?? 'https://www.pymestierramarilla.cl').href} />
+    <meta property="og:locale" content="es_CL" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <slot name="header" />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

@@ -1,0 +1,69 @@
+---
+import type { Pyme } from '@/lib/types'
+import PymeCard from './PymeCard.astro'
+
+type Props = {
+  pymes: Pyme[]
+  rubros: string[]
+  showFilter?: boolean
+}
+
+const { pymes, rubros, showFilter = true } = Astro.props
+---
+
+{
+  showFilter && rubros.length > 0 && (
+    <div class="mb-8 flex flex-wrap items-center justify-center gap-2" id="pyme-filters" role="group" aria-label="Filtrar por rubro">
+      <button
+        type="button"
+        data-rubro="todos"
+        class="pyme-filter-btn rounded-full bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors"
+        aria-pressed="true"
+      >
+        Todos
+      </button>
+      {rubros.map((rubro) => (
+        <button
+          type="button"
+          data-rubro={rubro}
+          class="pyme-filter-btn rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-navy ring-1 ring-gray-200 transition-colors hover:ring-brand-yellow"
+          aria-pressed="false"
+        >
+          {rubro}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="pyme-grid">
+  {pymes.map((pyme) => <PymeCard pyme={pyme} />)}
+</div>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.pyme-filter-btn')
+  const cards = document.querySelectorAll<HTMLElement>('#pyme-grid article')
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const rubro = btn.dataset.rubro ?? 'todos'
+
+      filterBtns.forEach((b) => {
+        const isActive = b === btn
+        b.setAttribute('aria-pressed', String(isActive))
+        b.classList.toggle('bg-brand-navy', isActive)
+        b.classList.toggle('text-white', isActive)
+        b.classList.toggle('bg-white', !isActive)
+        b.classList.toggle('text-brand-navy', !isActive)
+        b.classList.toggle('ring-1', !isActive)
+        b.classList.toggle('ring-gray-200', !isActive)
+      })
+
+      cards.forEach((card) => {
+        const cardRubro = card.dataset.rubro
+        const show = rubro === 'todos' || cardRubro === rubro
+        card.style.display = show ? '' : 'none'
+      })
+    })
+  })
+</script>

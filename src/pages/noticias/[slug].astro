@@ -1,0 +1,100 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Header from '@/components/Header.astro'
+import Footer from '@/components/Footer.astro'
+import NewsCard from '@/components/NewsCard.astro'
+import { getNoticias, getPymes } from '@/lib/wordpress'
+
+export async function getStaticPaths() {
+  const noticias = await getNoticias()
+  return noticias.map((noticia) => ({
+    params: { slug: noticia.slug },
+    props: { noticia },
+  }))
+}
+
+const { noticia } = Astro.props
+const pymes = await getPymes()
+const allNoticias = await getNoticias()
+const related = allNoticias.filter((n) => n.slug !== noticia.slug).slice(0, 3)
+
+const formattedDate = new Date(noticia.date).toLocaleDateString('es-CL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: noticia.title,
+  description: noticia.excerpt,
+  image: noticia.image,
+  datePublished: noticia.date,
+  author: {
+    '@type': 'Organization',
+    name: 'Pymes Tierramarilla',
+  },
+}
+---
+
+<BaseLayout title={noticia.title} description={noticia.excerpt} image={noticia.image} jsonLd={articleSchema}>
+  <Header slot="header" />
+
+  <article>
+    <div class="relative h-[40vh] min-h-[280px] overflow-hidden bg-brand-navy">
+      <img
+        src={noticia.image}
+        alt={noticia.title}
+        class="h-full w-full object-cover opacity-60"
+        width="1200"
+        height="630"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-brand-navy to-transparent" />
+      <div class="section-container absolute bottom-0 left-0 right-0 pb-10">
+        <div class="flex flex-wrap items-center gap-2 text-sm text-white/70">
+          {noticia.source && <span class="font-semibold text-brand-yellow">{noticia.source}</span>}
+          <span aria-hidden="true">·</span>
+          <time datetime={noticia.date}>{formattedDate}</time>
+        </div>
+        <h1 class="mt-3 max-w-4xl text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
+          {noticia.title}
+        </h1>
+      </div>
+    </div>
+
+    <div class="section-container py-12">
+      <div class="prose prose-lg mx-auto max-w-3xl text-text-muted">
+        {
+          noticia.content ? (
+            <div set:html={noticia.content} />
+          ) : (
+            <p>{noticia.excerpt}</p>
+          )
+        }
+      </div>
+
+      {
+        related.length > 0 && (
+          <div class="mt-16 border-t border-gray-200 pt-12">
+            <h2 class="mb-8 text-xl font-bold text-brand-navy">Noticias relacionadas</h2>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((item) => (
+                <NewsCard noticia={item} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </article>
+
+  <Footer slot="footer" pymes={pymes} />
+</BaseLayout>
+
+<style>
+  .prose :global(p) {
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+</style>

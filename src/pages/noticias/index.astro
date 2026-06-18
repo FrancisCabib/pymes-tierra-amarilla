@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Header from '@/components/Header.astro'
+import Footer from '@/components/Footer.astro'
+import Hero from '@/components/Hero.astro'
+import SectionHeading from '@/components/SectionHeading.astro'
+import NewsGrid from '@/components/NewsGrid.astro'
+import { getNoticias, getPymes } from '@/lib/wordpress'
+
+const noticias = await getNoticias()
+const pymes = await getPymes()
+---
+
+<BaseLayout
+  title="Noticias"
+  description="Noticias y actualizaciones de la Agrupación PYMES Tierra Amarilla."
+>
+  <Header slot="header" />
+
+  <Hero compact>
+    Noticias y Actualizaciones
+  </Hero>
+
+  <section class="section-container py-16 lg:py-24">
+    <SectionHeading
+      title="Lo último de nuestra agrupación"
+      subtitle="Historias, eventos y avances que impactan a nuestras empresas y la comunidad local."
+    />
+    <NewsGrid noticias={noticias} columns={3} />
+  </section>
+
+  <Footer slot="footer" pymes={pymes} />
+</BaseLayout>

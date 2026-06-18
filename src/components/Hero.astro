@@ -1,0 +1,79 @@
+---
+import { siteConfig } from '@/lib/site'
+
+type Props = {
+  compact?: boolean
+}
+
+const { compact = false } = Astro.props
+---
+
+<section
+  class:list={[
+    'relative flex items-center overflow-hidden bg-brand-navy',
+    compact ? 'min-h-[280px]' : 'min-h-[85vh]',
+  ]}
+  aria-label="Presentación principal"
+>
+  <div class="absolute inset-0">
+    <img
+      src="/images/hero-bg.svg"
+      alt="Vista aérea de Tierra Amarilla, Región de Atacama"
+      class="h-full w-full object-cover"
+      loading="eager"
+      fetchpriority="high"
+      width="1920"
+      height="1080"
+    />
+    <div class="absolute inset-0 bg-brand-navy/75" />
+    <div class="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-brand-navy/40" />
+  </div>
+
+  <div class="section-container relative z-10 py-16 text-center text-white lg:py-24">
+    {
+      !compact && (
+        <div class="mx-auto mb-8 inline-flex flex-col items-center rounded-2xl border border-white/20 bg-white/10 px-8 py-6 backdrop-blur-sm">
+          <span class="text-6xl font-extrabold text-brand-yellow drop-shadow-lg lg:text-8xl" aria-hidden="true">
+            P
+          </span>
+          <p class="mt-2 text-xs font-bold uppercase tracking-[0.3em] text-brand-yellow sm:text-sm">
+            Agrupación PYMES
+          </p>
+          <p class="text-sm font-bold uppercase tracking-[0.2em] text-white sm:text-base">Tierra Amarilla</p>
+        </div>
+      )
+    }
+
+    {
+      compact ? (
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <slot />
+        </h1>
+      ) : (
+        <>
+          <h1 class="mx-auto max-w-4xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+            {siteConfig.tagline}
+          </h1>
+          <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg">
+            Fortalecemos el ecosistema emprendedor de Tierra Amarilla, conectando a nuestras PYMES con
+            oportunidades de crecimiento y desarrollo sostenible.
+          </p>
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="/pymes"
+              class="inline-flex min-w-[200px] items-center justify-center rounded-full bg-brand-yellow px-8 py-3 text-sm font-bold text-brand-navy transition-transform hover:scale-105"
+            >
+              Conoce nuestras PYMES
+            </a>
+            <a
+              href="/contacto"
+              class="inline-flex min-w-[200px] items-center justify-center rounded-full border-2 border-white/60 px-8 py-3 text-sm font-semibold text-white transition-colors hover:border-brand-yellow hover:text-brand-yellow"
+            >
+              Contáctanos
+            </a>
+          </div>
+        </>
+      )
+    }
+  </div>
+</section>

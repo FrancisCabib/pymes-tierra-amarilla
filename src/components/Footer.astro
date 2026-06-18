@@ -1,0 +1,97 @@
+---
+import { siteConfig } from '@/lib/site'
+import type { Pyme } from '@/lib/types'
+
+type Props = {
+  pymes?: Pyme[]
+}
+
+const { pymes = [] } = Astro.props
+
+const currentYear = new Date().getFullYear()
+---
+
+<footer class="bg-brand-navy text-white">
+  {
+    pymes.length > 0 && (
+      <div class="border-b border-white/10 py-8">
+        <div class="section-container">
+          <p class="mb-4 text-center text-xs font-medium uppercase tracking-widest text-white/60">
+            Empresas que nos acompañan
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-6">
+            {pymes.map((pyme) => (
+              <div
+                class="flex h-14 w-24 items-center justify-center rounded-lg bg-white/95 p-2"
+                title={pyme.name}
+              >
+                <img
+                  src={pyme.logo}
+                  alt={`Logo ${pyme.name}`}
+                  class="max-h-full max-w-full object-contain"
+                  loading="lazy"
+                  width="96"
+                  height="56"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  <div class="section-container py-12">
+    <div class="grid gap-10 md:grid-cols-3">
+      <div>
+        <div class="mb-4 flex items-center gap-2">
+          <span class="text-3xl font-extrabold text-brand-yellow">P</span>
+          <span class="font-semibold">ymes Tierramarilla</span>
+        </div>
+        <p class="text-sm leading-relaxed text-white/70">{siteConfig.description}</p>
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-yellow">Navegación</h2>
+        <ul class="space-y-2 text-sm text-white/80">
+          <li><a href="/" class="hover:text-brand-yellow">Inicio</a></li>
+          <li><a href="/quienes-somos" class="hover:text-brand-yellow">¿Quiénes somos?</a></li>
+          <li><a href="/pymes" class="hover:text-brand-yellow">Pymes</a></li>
+          <li><a href="/noticias" class="hover:text-brand-yellow">Noticias</a></li>
+          <li><a href="/contacto" class="hover:text-brand-yellow">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-yellow">Contacto</h2>
+        <ul class="space-y-3 text-sm text-white/80">
+          <li>
+            <a href={siteConfig.whatsappLink} target="_blank" rel="noopener noreferrer" class="hover:text-brand-yellow">
+              {siteConfig.whatsapp}
+            </a>
+          </li>
+          <li>
+            <a href={siteConfig.facebookLink} target="_blank" rel="noopener noreferrer" class="hover:text-brand-yellow">
+              {siteConfig.facebook}
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${siteConfig.email}`} class="hover:text-brand-yellow">
+              {siteConfig.email}
+            </a>
+          </li>
+          <li class="text-white/60">{siteConfig.address}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/50">
+      <p>
+        © {currentYear} {siteConfig.name}. Desarrollado por{' '}
+        <a href={siteConfig.developer.url} class="text-brand-yellow hover:underline">
+          {siteConfig.developer.name}
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>
